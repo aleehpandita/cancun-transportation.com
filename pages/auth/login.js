@@ -1,11 +1,27 @@
 import React from "react";
 import Link from "next/link";
-
+import { csrfToken } from 'next-auth/client'
+import { signIn } from 'next-auth/client'
 // layout for page
 
 import Auth from "layouts/Auth.js";
 
-export default function Login() {
+
+
+
+export default function Login({ csrfToken }) {
+
+const [username, setUsername] = React.useState("");
+const [password, setPassword] = React.useState("");
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  // "username-login" matches the id for the credential
+  console.log(username,password)
+  signIn("username-login", { username, password});
+};
+
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -20,7 +36,7 @@ export default function Login() {
                 </div>
                 <div className="btn-wrapper text-center">
                   <button
-                    className="bg-white active:bg-gray-100 text-gray-800 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
+                    className="bg-white active:bg-gray-100 text-gray-800 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center text-xs ease-linear transition-all duration-150"
                     type="button"
                   >
                     <img
@@ -31,7 +47,7 @@ export default function Login() {
                     Github
                   </button>
                   <button
-                    className="bg-white active:bg-gray-100 text-gray-800 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
+                    className="bg-white active:bg-gray-100 text-gray-800 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center text-xs ease-linear transition-all duration-150"
                     type="button"
                   >
                     <img
@@ -48,18 +64,23 @@ export default function Login() {
                 <div className="text-gray-500 text-center mb-3 font-bold">
                   <small>Or sign in with credentials</small>
                 </div>
-                <form>
+                
+                <form method='post' onSubmit={handleSubmit} >
+                <input name='csrfToken' type='hidden' defaultValue={csrfToken}/>
+
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-gray-700 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Email
+                      Username
                     </label>
                     <input
-                      type="email"
+                      name='username' type='email'
                       className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
-                      placeholder="Email"
+                      placeholder="Username"
+                      onChange={(e) => setUsername(e.target.value)}
+                      
                     />
                   </div>
 
@@ -67,13 +88,16 @@ export default function Login() {
                     <label
                       className="block uppercase text-gray-700 text-xs font-bold mb-2"
                       htmlFor="grid-password"
+                       type='password'
                     >
                       Password
                     </label>
                     <input
+                      name='password'
                       type="password"
                       className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full ease-linear transition-all duration-150"
                       placeholder="Password"
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                   <div>
@@ -90,13 +114,15 @@ export default function Login() {
                   </div>
 
                   <div className="text-center mt-6">
-                    <button
+                    <button type="submit"
                       className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
-                      type="button"
                     >
                       Sign In
                     </button>
+                    
                   </div>
+
+
                 </form>
               </div>
             </div>
@@ -125,4 +151,11 @@ export default function Login() {
   );
 }
 
+Login.getInitialProps = async (context) => {
+  return {
+    csrfToken: await csrfToken(context)
+  }
+}
 Login.layout = Auth;
+
+

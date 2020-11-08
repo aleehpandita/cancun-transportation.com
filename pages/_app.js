@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
-
+import { Provider } from 'next-auth/client'
 import PageChange from "components/PageChange/PageChange.js";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -26,29 +26,20 @@ Router.events.on("routeChangeError", () => {
   document.body.classList.remove("body-page-transition");
 });
 
+
+
+
+
 export default class MyApp extends App {
   componentDidMount() {
     let comment = document.createComment(`
 
-=========================================================
-* Notus NextJS - v1.0.0 based on Tailwind Starter Kit by Creative Tim
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/notus-nextjs
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/notus-nextjs/blob/master/LICENSE.md)
-
-* Tailwind Starter Kit Page: https://www.creative-tim.com/learning-lab/tailwind-starter-kit/presentation
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+    RestaurantApp by DevPom
 
 `);
     document.insertBefore(comment, document.documentElement);
   }
+
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
 
@@ -73,7 +64,11 @@ export default class MyApp extends App {
           <title>Notus NextJS by Creative Tim</title>
         </Head>
         <Layout>
+            <Provider session={pageProps.session} 
+           
+            >
           <Component {...pageProps} />
+        </Provider>
         </Layout>
       </React.Fragment>
     );

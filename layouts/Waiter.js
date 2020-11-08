@@ -6,10 +6,10 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 import HeaderStats from "components/Headers/HeaderStats.js";
 import FooterAdmin from "components/Footers/FooterAdmin.js";
 
-export default function Admin({ children }) {
+export default function Waiter({ children }) {
   return (
     <>
-      <Sidebar />
+      
       <div className="relative md:ml-64 bg-gray-200">
         <AdminNavbar />
         {/* Header */}

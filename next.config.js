@@ -6,6 +6,9 @@ const withFonts = require("next-fonts");
 const webpack = require("webpack");
 const path = require("path");
 
+module.exports = {
+  basePath: '/admin/dashboard'
+}
 module.exports = withFonts(
   withCSS(
     withImages(
